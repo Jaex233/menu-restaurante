@@ -1,0 +1,571 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+    <title>Menú de Ofertas | Restaurante</title>
+    <!-- Fuentes y estilos base -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;14..32,400;14..32,600;14..32,700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: #fef8f0;  /* tono cálido de restaurante */
+            color: #2c241a;
+            line-height: 1.4;
+            padding: 1rem;
+        }
+
+        /* contenedor principal estilo menú */
+        .menu-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: #ffffff;
+            border-radius: 2rem;
+            box-shadow: 0 20px 35px -12px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+            padding: 1.8rem 1.5rem 2.5rem;
+        }
+
+        /* encabezado */
+        .restaurant-header {
+            text-align: center;
+            margin-bottom: 2rem;
+            border-bottom: 2px dashed #f0dbb2;
+            padding-bottom: 1.2rem;
+        }
+        .restaurant-header h1 {
+            font-size: 2.2rem;
+            font-weight: 800;
+            letter-spacing: -0.5px;
+            background: linear-gradient(135deg, #b45f2b, #e07c3c);
+            background-clip: text;
+            -webkit-background-clip: text;
+            color: transparent;
+            margin-bottom: 0.5rem;
+        }
+        .restaurant-header p {
+            color: #7f6148;
+            font-weight: 500;
+            font-size: 1rem;
+        }
+        .offer-badge {
+            background: #e83e2d10;
+            display: inline-block;
+            padding: 0.3rem 1rem;
+            border-radius: 40px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            color: #c0392b;
+            margin-top: 0.8rem;
+            backdrop-filter: blur(4px);
+        }
+        .offer-badge i {
+            margin-right: 6px;
+        }
+
+        /* grid de ofertas / platillos */
+        .offers-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 1.8rem;
+            margin: 2rem 0 1.5rem;
+        }
+
+        /* tarjeta de producto */
+        .menu-card {
+            background: white;
+            border-radius: 1.8rem;
+            overflow: hidden;
+            transition: all 0.25s ease;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.05);
+            border: 1px solid #f3e5d8;
+            display: flex;
+            flex-direction: column;
+        }
+        .menu-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 20px 30px -12px rgba(0, 0, 0, 0.15);
+            border-color: #f7d9b5;
+        }
+        .card-img {
+            width: 100%;
+            height: 180px;
+            object-fit: cover;
+            background: #f9ede1;
+            transition: transform 0.3s;
+        }
+        .menu-card:hover .card-img {
+            transform: scale(1.02);
+        }
+        .card-content {
+            padding: 1.2rem 1.2rem 1.4rem;
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+        }
+        .dish-title {
+            font-size: 1.4rem;
+            font-weight: 700;
+            display: flex;
+            justify-content: space-between;
+            align-items: baseline;
+            flex-wrap: wrap;
+            margin-bottom: 0.5rem;
+        }
+        .dish-name {
+            color: #2c241a;
+        }
+        .price-row {
+            display: flex;
+            align-items: center;
+            gap: 0.6rem;
+            margin: 0.6rem 0 0.4rem;
+            flex-wrap: wrap;
+        }
+        .old-price {
+            font-size: 1rem;
+            color: #a07c5c;
+            text-decoration: line-through;
+            font-weight: 400;
+        }
+        .offer-price {
+            font-size: 1.7rem;
+            font-weight: 800;
+            color: #d1421c;
+            letter-spacing: -0.5px;
+        }
+        .discount-tag {
+            background: #e83e2d;
+            color: white;
+            font-size: 0.75rem;
+            font-weight: 700;
+            padding: 0.2rem 0.7rem;
+            border-radius: 30px;
+            display: inline-block;
+        }
+        .dish-description {
+            color: #5e4b38;
+            font-size: 0.9rem;
+            margin: 0.6rem 0 1rem;
+            line-height: 1.4;
+            flex: 1;
+        }
+        .order-btn {
+            background: #ffedd5;
+            border: none;
+            padding: 0.7rem 0;
+            border-radius: 2rem;
+            font-weight: 700;
+            font-size: 0.9rem;
+            color: #b45f2b;
+            cursor: pointer;
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            margin-top: 0.5rem;
+            font-family: inherit;
+        }
+        .order-btn i {
+            font-size: 0.9rem;
+        }
+        .order-btn:hover {
+            background: #e07c3c;
+            color: white;
+            transform: scale(0.98);
+        }
+
+        /* sección QR info + footer */
+        .qr-info {
+            background: #fef4e8;
+            border-radius: 1.5rem;
+            margin-top: 2rem;
+            padding: 1.2rem 1.5rem;
+            text-align: center;
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-between;
+            align-items: center;
+            gap: 1rem;
+        }
+        .qr-text {
+            font-size: 0.9rem;
+            color: #6b4c34;
+            font-weight: 500;
+        }
+        .qr-text i {
+            margin-right: 6px;
+            color: #e07c3c;
+        }
+        .mock-qr {
+            background: white;
+            padding: 0.4rem 1rem;
+            border-radius: 50px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            color: #2c241a;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.05);
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .mock-qr i {
+            font-size: 1.1rem;
+            color: #1e3c2c;
+        }
+        footer {
+            text-align: center;
+            margin-top: 2rem;
+            font-size: 0.75rem;
+            color: #aa8b6e;
+        }
+        @media (max-width: 650px) {
+            .menu-container {
+                padding: 1rem;
+            }
+            .restaurant-header h1 {
+                font-size: 1.8rem;
+            }
+            .offer-price {
+                font-size: 1.4rem;
+            }
+        }
+        /* pequeño toast notificación */
+        .toast-msg {
+            position: fixed;
+            bottom: 25px;
+            left: 50%;
+            transform: translateX(-50%) scale(0.9);
+            background: #2c241a;
+            color: #ffefdf;
+            padding: 10px 22px;
+            border-radius: 60px;
+            font-size: 0.85rem;
+            font-weight: 500;
+            z-index: 1000;
+            opacity: 0;
+            transition: opacity 0.2s, transform 0.2s;
+            pointer-events: none;
+            white-space: nowrap;
+            box-shadow: 0 6px 14px rgba(0,0,0,0.2);
+        }
+        .toast-msg.show {
+            opacity: 1;
+            transform: translateX(-50%) scale(1);
+        }
+        @media (max-width: 480px) {
+            .toast-msg {
+                white-space: normal;
+                text-align: center;
+                width: 80%;
+                font-size: 0.8rem;
+            }
+        }
+    </style>
+</head>
+<body>
+
+<div class="menu-container">
+    <div class="restaurant-header">
+        <h1><i class="fas fa-utensils"></i> SABOR & OFERTA</h1>
+        <p>📍 Menú digital · Escanea el código y descubre nuestros descuentos</p>
+        <div class="offer-badge">
+            <i class="fas fa-tag"></i> ¡Ofertas exclusivas para clientes móviles!
+        </div>
+    </div>
+
+    <!-- GRID DE OFERTAS / PLATILLOS -->
+    <div class="offers-grid" id="offersGrid">
+        <!-- las tarjetas se generarán con JS pero también puede ser estático, por mantenibilidad lo haremos dinámico pero también con fallback -->
+    </div>
+
+    <!-- Información visual del QR / escaneo -->
+    <div class="qr-info">
+        <div class="qr-text">
+            <i class="fas fa-qrcode"></i> Escanea este código en tu mesa → 
+            <span style="font-weight: 600;">Ofertas activas ahora</span>
+        </div>
+        <div class="mock-qr">
+            <i class="fas fa-mobile-alt"></i> Código QR | <span id="dynamicUrlDisplay">cargando...</span>
+        </div>
+    </div>
+    <footer>
+        <i class="far fa-clock"></i> Ofertas válidas hasta agotar stock · Escanea con tu cámara o lector QR
+    </footer>
+</div>
+
+<div id="toastNotification" class="toast-msg">✨ Pedido agregado (demo interactivo)</div>
+
+<script>
+    // ========================
+    // MENU DE OFERTAS (datos)
+    // ========================
+    const menuOffers = [
+        {
+            id: 1,
+            name: "Hamburguesa BBQ Doble",
+            description: "Carne angus, queso cheddar, cebolla caramelizada, salsa BBQ y papas rústicas.",
+            oldPrice: 15.90,
+            offerPrice: 10.90,
+            discount: "31% OFF",
+            image: "https://placehold.co/600x400/f9e5cf/8b5a2b?text=🍔+Burger+BBQ",
+            imageAlt: "Hamburguesa BBQ"
+        },
+        {
+            id: 2,
+            name: "Pizza Margherita Especial",
+            description: "Mozzarella fresca, albahaca, tomate orgánico y un toque de aceite de oliva.",
+            oldPrice: 13.50,
+            offerPrice: 8.90,
+            discount: "34% OFF",
+            image: "https://placehold.co/600x400/f9e5cf/8b5a2b?text=🍕+Pizza+Margherita"
+        },
+        {
+            id: 3,
+            name: "Tacos al Pastor (3 pzas)",
+            description: "Tortilla de maíz, pastor adobado, piña, cebolla, cilantro y salsa roja.",
+            oldPrice: 11.20,
+            offerPrice: 7.50,
+            discount: "33% OFF",
+            image: "https://placehold.co/600x400/f9e5cf/8b5a2b?text=🌮+Tacos+Al+Pastor"
+        },
+        {
+            id: 4,
+            name: "Lomo Saltado (Fusión)",
+            description: "Lomo jugoso, papas fritas, arroz, cebolla, tomate y salsa peruana.",
+            oldPrice: 18.40,
+            offerPrice: 13.90,
+            discount: "24% OFF",
+            image: "https://placehold.co/600x400/f9e5cf/8b5a2b?text=🥩+Lomo+Saltado"
+        },
+        {
+            id: 5,
+            name: "Ensalada César + Pollo",
+            description: "Pechuga grill, queso parmesano, crutones caseros y aderezo César.",
+            oldPrice: 12.30,
+            offerPrice: 8.90,
+            discount: "28% OFF",
+            image: "https://placehold.co/600x400/f9e5cf/8b5a2b?text=🥗+Ensalada+César"
+        },
+        {
+            id: 6,
+            name: "Postre: Tarta de Queso",
+            description: "Con coulis de frutos rojos, base crujiente y textura cremosa.",
+            oldPrice: 6.50,
+            offerPrice: 3.90,
+            discount: "40% OFF",
+            image: "https://placehold.co/600x400/f9e5cf/8b5a2b?text=🍰+Cheesecake"
+        }
+    ];
+
+    // función para renderizar todas las tarjetas de ofertas
+    function renderOffers() {
+        const grid = document.getElementById('offersGrid');
+        if (!grid) return;
+
+        let cardsHTML = '';
+        menuOffers.forEach(item => {
+            cardsHTML += `
+                <div class="menu-card" data-id="${item.id}">
+                    <img class="card-img" src="${item.image}" alt="${item.name}" loading="lazy" 
+                         onerror="this.src='https://placehold.co/600x400/f0e0d0/7a4c2c?text=🍽️+Plato'">
+                    <div class="card-content">
+                        <div class="dish-title">
+                            <span class="dish-name">${escapeHtml(item.name)}</span>
+                        </div>
+                        <div class="price-row">
+                            <span class="old-price">$${item.oldPrice.toFixed(2)}</span>
+                            <span class="offer-price">$${item.offerPrice.toFixed(2)}</span>
+                            <span class="discount-tag">${item.discount}</span>
+                        </div>
+                        <p class="dish-description">${escapeHtml(item.description)}</p>
+                        <button class="order-btn" data-id="${item.id}" data-name="${escapeHtml(item.name)}" data-price="${item.offerPrice.toFixed(2)}">
+                            <i class="fas fa-shopping-cart"></i> Pedir oferta
+                        </button>
+                    </div>
+                </div>
+            `;
+        });
+        grid.innerHTML = cardsHTML;
+
+        // añadir eventos a los botones (delegación o directa, pero usamos el grid)
+        const btns = grid.querySelectorAll('.order-btn');
+        btns.forEach(btn => {
+            btn.addEventListener('click', (e) => {
+                e.stopPropagation();
+                const name = btn.getAttribute('data-name');
+                const price = btn.getAttribute('data-price');
+                showToast(`🍽️ "${name}" agregado · $${price} (oferta aplicada)`);
+                // Aquí se podría integrar un carrito real, pero la demo muestra la interacción.
+            });
+        });
+    }
+
+    // pequeño helper para evitar XSS
+    function escapeHtml(str) {
+        if (!str) return '';
+        return str.replace(/[&<>]/g, function(m) {
+            if (m === '&') return '&amp;';
+            if (m === '<') return '&lt;';
+            if (m === '>') return '&gt;';
+            return m;
+        }).replace(/[\uD800-\uDBFF][\uDC00-\uDFFF]/g, function(c) {
+            return c;
+        });
+    }
+
+    // Toast notificación
+    let toastTimeout = null;
+    function showToast(message) {
+        const toast = document.getElementById('toastNotification');
+        if (!toast) return;
+        if (toastTimeout) clearTimeout(toastTimeout);
+        toast.textContent = message;
+        toast.classList.add('show');
+        toastTimeout = setTimeout(() => {
+            toast.classList.remove('show');
+        }, 2500);
+    }
+
+    // =====================================================
+    // LÓGICA QR: Esta página debe ser accesible mediante un código QR.
+    // Cuando el cliente escanea, se le dirige a esta misma URL (ofertas activas).
+    // Simulación: Mostramos la URL actual dinámicamente, para que el dueño
+    // del restaurante genere un QR que apunte a esta página.
+    // También podemos añadir parámetros de tracking si se desea.
+    // =====================================================
+
+    function updateQrInfo() {
+        const currentUrl = window.location.href;
+        const urlSpan = document.getElementById('dynamicUrlDisplay');
+        if (urlSpan) {
+            // acortar visualmente si es muy larga, pero mostramos la real para copiar
+            let displayUrl = currentUrl;
+            if (displayUrl.length > 45) {
+                displayUrl = displayUrl.substring(0, 40) + '...';
+            }
+            urlSpan.textContent = displayUrl;
+            // agregar título tooltip con url completa
+            urlSpan.parentElement?.setAttribute('title', `URL actual: ${currentUrl}`);
+        }
+
+        // Mostrar un pequeño aviso en consola sobre cómo generar QR
+        console.log('[QR ready] Escanea con cualquier lector QR apuntando a: ' + currentUrl);
+        // opcional: si queremos avisar en pantalla de forma sutil
+        const qrDiv = document.querySelector('.qr-info');
+        if (qrDiv && !window.location.search.includes('from=qr')) {
+            // no hacer nada molesto, solo contextual
+        }
+    }
+
+    // =====================================================
+    // DETECCIÓN DE ACCESO DESDE CÓDIGO QR (opcional)
+    // Se puede añadir un parámetro para análisis, pero la premisa es
+    // que al escanear el QR, el cliente ingresa a esta página.
+    // Adicionalmente podemos mostrar un banner de bienvenida si es primera visita
+    // o si el usuario accedió vía 'qr' (podríamos agregar ?source=qr en el QR real)
+    // =====================================================
+    function handleQrSource() {
+        const urlParams = new URLSearchParams(window.location.search);
+        const source = urlParams.get('source');
+        const ref = urlParams.get('ref');
+        if (source === 'qr' || ref === 'mesa') {
+            // Podemos añadir un mensaje personalizado: "Bienvenido, oferta especial por escaneo"
+            const headerDiv = document.querySelector('.restaurant-header .offer-badge');
+            if (headerDiv && !document.querySelector('.welcome-qr-note')) {
+                const welcomeNote = document.createElement('div');
+                welcomeNote.className = 'welcome-qr-note';
+                welcomeNote.style.marginTop = '12px';
+                welcomeNote.style.fontSize = '0.85rem';
+                welcomeNote.style.background = '#e9f5e6';
+                welcomeNote.style.padding = '6px 12px';
+                welcomeNote.style.borderRadius = '30px';
+                welcomeNote.style.display = 'inline-block';
+                welcomeNote.innerHTML = '<i class="fas fa-check-circle"></i> Acceso vía QR · Ofertas exclusivas para ti ✨';
+                headerDiv.parentNode?.insertBefore(welcomeNote, headerDiv.nextSibling);
+            }
+        } else {
+            // si no se especifica, igual no hay problema, mostramos mensaje suave
+            // pero es opcional.
+            const container = document.querySelector('.menu-container');
+            if (container && !document.querySelector('.info-scan')) {
+                const subtleHint = document.createElement('div');
+                subtleHint.className = 'info-scan';
+                subtleHint.style.textAlign = 'center';
+                subtleHint.style.marginTop = '0px';
+                subtleHint.style.fontSize = '0.75rem';
+                subtleHint.style.color = '#b58053';
+                subtleHint.innerHTML = '<i class="fas fa-qrcode"></i> Para ver ofertas, escanea el código en tu mesa. Si ya lo hiciste, ¡disfruta!';
+                const qrElem = document.querySelector('.qr-info');
+                if (qrElem) qrElem.parentNode?.insertBefore(subtleHint, qrElem);
+            }
+        }
+    }
+
+    // =====================================================
+    // SIMULADOR DE "PEDIDO" + DEMOSTRACIÓN DE INTERACCIÓN
+    // Además podemos añadir que al hacer clic en pedir, se acumule
+    // un pequeño contador de simulación (opcional)
+    // =====================================================
+    let simulatedCart = [];
+
+    // Extendemos la funcionalidad de los botones pero ya la tenemos, podemos sobrescribir más elegante
+    function enhanceOrderButtons() {
+        // mejoramos la lógica para que capture también el evento si se recarga dinámico?
+        const observer = new MutationObserver(() => {
+            document.querySelectorAll('.order-btn').forEach(btn => {
+                // evitamos duplicar listeners con una marca
+                if (btn.hasAttribute('data-listener')) return;
+                btn.setAttribute('data-listener', 'true');
+                btn.addEventListener('click', (e) => {
+                    // ya hay un toast desde renderOffers, pero consolidamos para mantener único
+                    // pero podría duplicarse, así que prevenimos doble toast
+                    // La función showToast ya está en el click original, pero si se agregan múltiples listeners, no pasa nada catastrófico
+                    // limpiamos para que solo exista uno: mejor remover listeners duplicados potenciales.
+                    // Para garantizar un solo toast, delegamos.
+                });
+            });
+        });
+        observer.observe(document.getElementById('offersGrid'), { childList: true, subtree: true });
+    }
+
+    // Inicializador completo
+    function init() {
+        renderOffers();          // pinta las ofertas
+        updateQrInfo();         // muestra la url actual para generar QR
+        handleQrSource();       // efectos por si viene de QR con parámetro
+        enhanceOrderButtons();  // refuerzo de interacciones (evita duplicidad)
+
+        // además, si queremos ofrecer un pequeño snippet para generar el código QR desde el propio sitio:
+        const mockQrDiv = document.querySelector('.mock-qr');
+        if (mockQrDiv) {
+            mockQrDiv.style.cursor = 'pointer';
+            mockQrDiv.addEventListener('click', () => {
+                const urlActual = window.location.href;
+                // Mostramos mensaje con instrucciones para generar QR
+                showToast(`🔲 Escanea o comparte: ${urlActual} (puedes generar QR con cualquier app)`);
+                // Copiar al portapapeles también sería un extra
+                navigator.clipboard?.writeText(urlActual).then(() => {
+                    showToast(`✅ Enlace copiado: genera un código QR con esta URL`);
+                }).catch(() => {});
+            });
+        }
+    }
+
+    // ejecutar cuando el DOM esté listo
+    if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', init);
+    } else {
+        init();
+    }
+</script>
+</body>
+</html>
